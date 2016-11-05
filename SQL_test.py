@@ -13,9 +13,10 @@ class MySQLTest:
         self.sex = ""
         self.income = 0
         self.table_name = ""
+        self.fields_name = ""
 
     def create_table(self, table_name):
-        self.cursor.execute("DROP TABLE IF EXISTS %s" % table_name)
+        self.drop_table(table_name)
 
         sql = 'CREATE TABLE %s (\
          FIRST_NAME  CHAR(20) NOT NULL,\
@@ -24,26 +25,39 @@ class MySQLTest:
          SEX CHAR(1),\
          INCOME FLOAT )' % table_name
 
-        self.cursor.execute(sql)
+        self.execute_statement(sql)
+
+    def drop_table(self, table_name):
+        sql = " DROP TABLE IF EXISTS %s" % table_name
+        self.execute_statement(sql)
 
     def insert_info(self, fname, lname, age, sex, income, table_name):
         sql_1 = "INSERT INTO %s(FIRST_NAME,\
                  LAST_NAME, AGE, SEX, INCOME)\
                  VALUES ('%s', '%s', '%d', '%c', '%d' )" % (table_name, fname, lname, age, sex, income)
+        self.execute_statement(sql_1)
+
+    def delete_info(self, table_name, fields_name, symbol, temp_value):
+        sql = "DELETE FROM %s WHERE %s %c %s" % (table_name, fields_name, symbol, temp_value)
+        self.execute_statement(sql)
+
+    def alter_info(self, table_name, fields_name_1, temp_value, fields_name_2, temp_value_2):
+        sql = "UPDATE %s SET %s = %s WHERE %s = %s" % (table_name, fields_name_1, temp_value, fields_name_2, temp_value_2)
+        self.cursor.execute(sql)
+
+    def execute_statement(self, sql):
         try:
-            # 执行sql语句
-            self.cursor.execute(sql_1)
-            # 提交到数据库执行
+            self.cursor.execute(sql)
             self.db.commit()
         except Exception as e:
-            # Rollback in case there is any error
             print e
             self.db.rollback()
 
     def show_data(self, table_name):
         sql = "select * from %s where income > '%d'" % (table_name, 1000)
         try:
-            self.cursor.execute(sql)
+            # self.cursor.execute(sql)
+            self.execute_statement(sql)
             results = self.cursor.fetchall()
             for each in results:
                 fname = each[0]
@@ -61,7 +75,9 @@ class MySQLTest:
 
 
 tt = MySQLTest()
-tt.create_table("justATest")
-tt.insert_info('zas', 'Zheng', 18, 'M', 100000, 'justATest')
-tt.show_data("justATest")
+# tt.delete_info()
+tt.drop_table("justAqTest")
+tt.create_table("justAqTest")
+tt.insert_info('zas', 'Zheng', 18, 'M', 100000, 'justAqTest')
+tt.show_data("justAqTest")
 tt.close_db()
