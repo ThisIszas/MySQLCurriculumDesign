@@ -12,23 +12,24 @@ class MySQLTest:
         self.age = 0
         self.sex = ""
         self.income = 0
+        self.table_name = ""
 
-    def create_table(self):
-        self.cursor.execute("DROP TABLE IF EXISTS EMPLOYEE")
+    def create_table(self, table_name):
+        self.cursor.execute("DROP TABLE IF EXISTS %s" % table_name)
 
-        sql = 'CREATE TABLE EMPLOYEE (\
+        sql = 'CREATE TABLE %s (\
          FIRST_NAME  CHAR(20) NOT NULL,\
          LAST_NAME  CHAR(20),\
          AGE INT,  \
          SEX CHAR(1),\
-         INCOME FLOAT )'
+         INCOME FLOAT )' % table_name
 
         self.cursor.execute(sql)
 
-    def insert_info(self, fname, lname, age, sex, income):
-        sql_1 = "INSERT INTO EMPLOYEE(FIRST_NAME,\
+    def insert_info(self, fname, lname, age, sex, income, table_name):
+        sql_1 = "INSERT INTO %s(FIRST_NAME,\
                  LAST_NAME, AGE, SEX, INCOME)\
-                 VALUES ('%s', '%s', '%d', '%c', '%d' )" % (fname, lname, age, sex, income)
+                 VALUES ('%s', '%s', '%d', '%c', '%d' )" % (table_name, fname, lname, age, sex, income)
         try:
             # 执行sql语句
             self.cursor.execute(sql_1)
@@ -39,8 +40,8 @@ class MySQLTest:
             print e
             self.db.rollback()
 
-    def show_data(self):
-        sql = "select * from employee where income > '%d'" % 1000
+    def show_data(self, table_name):
+        sql = "select * from %s where income > '%d'" % (table_name, 1000)
         try:
             self.cursor.execute(sql)
             results = self.cursor.fetchall()
@@ -60,7 +61,7 @@ class MySQLTest:
 
 
 tt = MySQLTest()
-tt.create_table()
-tt.insert_info('zas', 'Zheng', 18, 'M', 100000)
-tt.show_data()
+tt.create_table("justATest")
+tt.insert_info('zas', 'Zheng', 18, 'M', 100000, 'justATest')
+tt.show_data("justATest")
 tt.close_db()
