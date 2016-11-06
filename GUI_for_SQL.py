@@ -35,7 +35,7 @@ class LoginForm(wx.Panel):
         self.nameTextCtrl = ""
         self.passwordTextCtrl = ""
         self.create_controls()
-        self.do_layout1()
+        self.do_layout()
 
     def create_controls(self):
         self.login_name_Label = wx.StaticText(self, label=u"学生成绩管理系统")
@@ -45,7 +45,7 @@ class LoginForm(wx.Panel):
         self.nameTextCtrl = wx.TextCtrl(self, value="")
         self.passwordTextCtrl = wx.TextCtrl(self, value=u"", style=wx.TE_PASSWORD)
 
-    def do_layout1(self):
+    def do_layout(self):
         box_sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
         grid_sizer = wx.FlexGridSizer(rows=5, cols=2, vgap=8, hgap=8)
         expand_option = dict(flag=wx.EXPAND)
