@@ -1,4 +1,6 @@
 # coding:utf-8
+# http://blog.csdn.net/chenghit/article/details/50421090
+# http://www.cnblogs.com/dyx1024/archive/2012/07/05/2578579.html
 import wx
 
 
@@ -18,13 +20,13 @@ class RebuildFrame(wx.Frame):  # 主框体,所有界面都往Frame里加
         menu_bar.Append(filemenu, "&File")
         self.SetMenuBar(menu_bar)
 
-        self.panel = wx.Panel(self)
-        self.login_name_Label = wx.StaticText(self.panel, label=u"学生成绩管理系统")
-        self.confirm_button = wx.Button(self.panel, label=u"登录")
-        self.username_label = wx.StaticText(self.panel, label=u"用户名")
-        self.password = wx.StaticText(self.panel, label=u"密码")
-        self.nameTextCtrl = wx.TextCtrl(self.panel, value="")
-        self.passwordTextCtrl = wx.TextCtrl(self.panel, value=u"", style=wx.TE_PASSWORD)
+        self.login_panel = wx.Panel(self)
+        self.login_name_Label = wx.StaticText(self.login_panel, label=u"学生成绩管理系统")
+        self.confirm_button = wx.Button(self.login_panel, label=u"登录")
+        self.username_label = wx.StaticText(self.login_panel, label=u"用户名")
+        self.password = wx.StaticText(self.login_panel, label=u"密码")
+        self.nameTextCtrl = wx.TextCtrl(self.login_panel, value="")
+        self.passwordTextCtrl = wx.TextCtrl(self.login_panel, value=u"", style=wx.TE_PASSWORD)
         self.Bind(wx.EVT_BUTTON, self.confisrm_button, self.confirm_button)
 
         self.do_layout()
@@ -44,10 +46,7 @@ class RebuildFrame(wx.Frame):  # 主框体,所有界面都往Frame里加
 
     def confisrm_button(self, event):
         test = "True"
-        self.panel.Show(False)
-        notebook = wx.Notebook(self)
-        # self.login_form = LoginForm(notebook)
-        notebook.AddPage(self.login_form, 'Login Page')
+        self.login_panel.Show(False)
         print test
 
 app = wx.App(False)
