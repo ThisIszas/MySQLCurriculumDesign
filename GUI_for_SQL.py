@@ -1,8 +1,10 @@
 # coding:utf-8
+# http://blog.csdn.net/chenghit/article/details/50421090
+# http://www.cnblogs.com/dyx1024/archive/2012/07/05/2578579.html
 import wx
 
 
-class RebuildFrame(wx.Frame):
+class RebuildFrame(wx.Frame):  # 主框体,所有界面都往Frame里加
     def __init__(self, *args, **kwargs):
         super(RebuildFrame, self).__init__(*args, **kwargs)
         self.CreateStatusBar()
@@ -19,13 +21,13 @@ class RebuildFrame(wx.Frame):
         self.SetMenuBar(menu_bar)
 
         notebook = wx.Notebook(self)
-        login_form = LoginForm(notebook)
-        notebook.AddPage(login_form, 'Login Page')
-        self.SetClientSize(notebook.GetBestSize())
+        self.login_form = LoginForm(notebook)
+        notebook.AddPage(self.login_form, 'Login Page')
+        self.SetClientSize((830, 400))  # (宽, 高)
         self.Show()
 
 
-class LoginForm(wx.Panel):
+class LoginForm(wx.Panel):  #登录界面
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
         self.login_name_Label = ""
@@ -39,34 +41,23 @@ class LoginForm(wx.Panel):
 
     def create_controls(self):
         self.login_name_Label = wx.StaticText(self, label=u"学生成绩管理系统")
-        self.confirm_button = wx.Button(self, label=u"确认")
+        self.confirm_button = wx.Button(self, label=u"登录")
         self.username_label = wx.StaticText(self, label=u"用户名")
         self.password = wx.StaticText(self, label=u"密码")
         self.nameTextCtrl = wx.TextCtrl(self, value="")
         self.passwordTextCtrl = wx.TextCtrl(self, value=u"", style=wx.TE_PASSWORD)
 
     def do_layout(self):
-        box_sizer = wx.BoxSizer(orient=wx.HORIZONTAL)
-        grid_sizer = wx.FlexGridSizer(rows=5, cols=2, vgap=8, hgap=8)
-        expand_option = dict(flag=wx.EXPAND)
-        no_options = dict()
-        empty_space = ((0, 0), no_options)
+        for control, x, y, width, height in \
+                [(self.login_name_Label, 360, 90, -1, -1),
+                 (self.username_label, 290, 150, -1, -1),
+                 (self.nameTextCtrl, 330, 148, 150, 25),
+                 (self.password, 295, 183, -1, -1),
+                 (self.passwordTextCtrl, 330, 178, 150, 25),
+                 (self.confirm_button, 350, 210, -1, -1)
+                 ]:
+            control.SetDimensions(x=x, y=y, width=width, height=height)
 
-        for control, options in\
-                [empty_space,
-                 (self.login_name_Label, dict(flag=wx.ALIGN_CENTER)),
-                 (self.username_label, no_options),
-                 (self.nameTextCtrl, expand_option),
-                 (self.password, no_options),
-                 (self.passwordTextCtrl, expand_option),
-                 empty_space,
-                 (self.confirm_button, dict(flag=wx.ALIGN_CENTER))]:
-            grid_sizer.Add(control, **options)
-
-        for control, options in \
-                [(grid_sizer, dict(border=5, flag=wx.ALL))]:
-            box_sizer.Add(control, **options)
-        self.SetSizerAndFit(box_sizer)
 
 app = wx.App(False)
 frame = RebuildFrame(None, title=u'学生数据库管理系统')
